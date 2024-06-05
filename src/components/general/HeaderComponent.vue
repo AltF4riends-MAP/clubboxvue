@@ -8,7 +8,10 @@
       <nav>
         <ul class="nav-links">
           <li><router-link to="/dashboard">Home</router-link></li>
-          <li><router-link to="/cart">Cart</router-link></li>
+          <li class="cart">
+            <router-link to="/cart">Cart</router-link>
+            <span v-if="cartItemCount > 0" class="badge">{{ cartItemCount }}</span>
+          </li>
           <li><router-link to="/club">Club</router-link></li>
           <li><router-link to="/calendar">Calendar</router-link></li>
           <li><router-link to="/faq">FAQ</router-link></li>
@@ -28,6 +31,7 @@
 <script>
 export default {
   name: 'HeaderComponent',
+  props: ['cartItemCount'],
   data() {
     return {
       dropdownVisible: false
@@ -38,12 +42,11 @@ export default {
       this.dropdownVisible = !this.dropdownVisible;
     },
     logout() {
-      
       console.log('Logging out...');
       this.$router.push('/');
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -58,7 +61,7 @@ export default {
   align-items: center;
   padding: 10px 20px;
   box-sizing: border-box;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .left-box, .right-box {
@@ -160,12 +163,26 @@ export default {
   .right-box {
     justify-content: center;
   }
-
 }
 
-.user{
+.user {
   width: 40px;
   height: 40px;
   margin-top: -18px;
+}
+
+.cart {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8em;
 }
 </style>

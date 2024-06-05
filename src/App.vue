@@ -1,14 +1,26 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view :cart="cart" @add-cart="handleAddToCart"></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
-}
+  name: 'App',
+  data() {
+    return {
+      cart: []
+    };
+  },
+  methods: {
+    handleAddToCart(eventDetail) {
+      this.cart.push(eventDetail);
+      console.table(this.cart);
+    }
+  }
+};
 </script>
+
 
 <style>
 #app {
