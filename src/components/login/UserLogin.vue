@@ -24,7 +24,7 @@
           </div>
           <button type="submit">Login</button>
         </form>
-        <a href="/register"><label class="register">Register Here</label></a>
+        <button class="register" @click.prevent="registerPage()"><label>Register Here</label></button>
     </div>
   </div>
   </div>
@@ -60,8 +60,12 @@ export default {
         alert('Login failed: ' + error.message);
       }
     },
+    registerPage(){
+      this.$router.push('/register');
+    }
+  },
+
   
-  }
 }
 </script>
 
@@ -166,8 +170,9 @@ button:hover {
 }
 
 .register{
-  color:maroon;
+  color:white;
   margin-top: 20px;
+
 }
 .register:hover{
   color:blue;
