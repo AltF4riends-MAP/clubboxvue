@@ -1,42 +1,61 @@
 <template>
-    <div class="club-card">
-      <img v-if="image" :src="image" alt="Club Image" class="club-image"/>
-      <div class="club-details">
-        <h2 class="club-title">{{ title }}</h2>
-        <p class="club-description">{{ description }}</p>
-        <button @click="process">Join Club</button>
-      </div>
+  <div class="club-card">
+    <img v-if="image" :src="image" alt="Club Image" class="club-image"/>
+    <div class="club-details">
+      <h2 class="club-title">{{ title }}</h2>
+      <p class="club-description">{{ description }}</p>
+      <button @click="manageClub">Manage Club</button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'ClubCard',
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
-      date: {
-        type: String,
-        required: true
-      },
-      description: {
-        type: String,
-        required: true
-      },
-      price: {
-        type: Number,
-        required: true
-      },
-      image: {
-        type: String,
-        required: false
-      }
+    <manage-club-modal
+      :club="club"
+      :visible="isModalVisible"
+      @close="isModalVisible = false"
+      @update="updateClub"
+    />
+  </div>
+</template>
+
+<script>
+import ManageClubModal from './ManageClubModal.vue';
+
+export default {
+  name: 'ClubCard',
+  props: {
+    title: {
+      type: String,
+      required: true
     },
-    
-  };
-  </script>
+    description: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String,
+      required: false
+    },
+    club: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      isModalVisible: false
+    };
+  },
+  components: {
+    ManageClubModal
+  },
+  methods: {
+    manageClub() {
+      this.isModalVisible = true;
+    },
+    updateClub(updatedClub) {
+      this.$emit('update', updatedClub);
+    }
+  }
+};
+</script>
   
   <style scoped>
   .club-card {

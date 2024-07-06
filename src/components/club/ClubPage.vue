@@ -1,29 +1,31 @@
 <template>
-    <div class="main-container">
+  <div class="main-container">
     <header-comp :cart-item-count="cart.length"></header-comp>
     <background-scene>
-        <div class="scrollable-box">
-            <div class="club-list">
+      <div class="scrollable-box">
+        <div class="club-list">
           <club-card
             v-for="club in clubs"
             :key="club.id"
-            :title="club.title"
+            :title="club.name"
             :description="club.description"
             :image="club.image"
+            :club="club"
+            @update="updateClub"
           />
         </div>
-        </div>
+      </div>
     </background-scene>
     <footer-comp></footer-comp>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import BackgroundScenery from '../general/BackgroundScenery.vue';
 import FooterComponent from '../general/FooterComponent.vue';
 import HeaderComponent from '../general/HeaderComponent.vue';
 import ClubCard from './ClubCard.vue';
-
 
 export default {
   name: 'ClubPage',
@@ -33,23 +35,32 @@ export default {
       required: true
     }
   },
-
-  data(){
-    return{
-        clubs: [
-        {
-          id: 1,
-          title: 'AltF4riends',
-          description: 'Where all friends meet outside',
-          image: require('../../assets/friends.png')
-        },
-        {
-          id: 2,
-          title: 'Unite Club',
-          description: 'United we stand, Devided we fall',
-          image: require('../../assets/unity.png')
-        }
-      ]
+  data() {
+    return {
+      clubs: []
+    };
+  },
+  created() {
+    this.fetchClubs();
+  },
+  methods: {
+    async fetchClubs() {
+      try {
+        const response = await axios.get('http://localhost/clubboxvue/src/components/club/get_clubs.php');
+        console.log('Response:', response); // Log the entire response object
+        this.clubs = response.data.map(club => ({
+          ...club,
+          image: `data:image/jpeg;base64,${club.image}`
+        }));
+      } catch (error) {
+        console.error('Error fetching club data:', error);
+      }
+    },
+    updateClub(updatedClub) {
+      const index = this.clubs.findIndex(club => club.id === updatedClub.id);
+      if (index !== -1) {
+        this.clubs.splice(index, 1, updatedClub);
+      }
     }
   },
   components: {
@@ -57,10 +68,8 @@ export default {
     'background-scene': BackgroundScenery,
     'header-comp': HeaderComponent,
     'club-card': ClubCard,
-
   },
-}
-
+};
 </script>
 
 <style>
