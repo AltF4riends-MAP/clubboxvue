@@ -66,7 +66,7 @@ export default {
   transition: box-shadow 0.3s;
   background-color: white;
   width: 20%;
-  height: 70vh;
+  height: 60vh;
 }
 
 .event-card:hover {
@@ -74,13 +74,13 @@ export default {
 }
 
 .event-image {
-  width: 15vw;
-  height: 30vh;
+  width: 12vw;
+  height: 24vh;
   border-bottom: 1px solid #ddd;
 }
 
 .event-details {
-  padding: 15px;
+  padding: 10px;
   text-align: center;
 }
 
@@ -100,6 +100,7 @@ export default {
 }
 
 .event-price {
+  padding: -20px;
   font-size: 1em;
   color: #333;
 }

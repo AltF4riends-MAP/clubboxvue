@@ -42,7 +42,7 @@
     },
     data() {
       return {
-        total: 0
+        total: 0.0
       };
     },
     watch: {
@@ -55,7 +55,7 @@
     },
     methods: {
       calculateTotal(cart) {
-        this.total = cart.reduce((acc, item) => acc + item.eventPrice, 0);
+        this.total = cart.reduce((acc, item) => acc + Number(item.eventPrice), 0);
       }
     },
     created() {
