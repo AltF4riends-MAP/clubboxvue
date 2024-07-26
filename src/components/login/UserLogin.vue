@@ -46,10 +46,10 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBsQse1mKxQ1F7-l41RE1Oz4QhP91qgmLw', {
-          email: this.email,
+        const response = await axios.post('http://localhost/ClubBoxPHP/student', {
+          utmEmail: this.email,
           password: this.password,
-          returnSecureToken: true
+          
         });
         console.log('Logged in:', response.data);
 

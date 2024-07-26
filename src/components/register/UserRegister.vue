@@ -9,8 +9,8 @@
             
             <form @submit.prevent="registerUser">
               <div class="top-form">
-                <label for="firstname">First Name:</label>
-                <input type="text" id="firstname" v-model="user.firstName" required>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" v-model="user.firstName" required>
                 
                 <label for="lastName">Last Name:</label>
                 <input type="text" id="lastName" v-model="user.lastName" required>
@@ -74,37 +74,19 @@ export default {
         return;
       }
       try {
-        
-        const authResponse = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBsQse1mKxQ1F7-l41RE1Oz4QhP91qgmLw', {
-          email: this.user.email,
-          password: this.user.password,
-          returnSecureToken: true,
+
+        const dbResponse = await axios.post('http://localhost/ClubBoxPHP/student', {
+          firstName: this.user.firstName,
+          lastName: this.user.lastName,
+          matricNo: this.user.matricNo,
+          yearCourse: this.user.yearCourse,
+          phoneNumber: this.user.phoneNumber,
+          address: this.user.address,
+          utmEmail: this.user.email,
+          password: this.user.password
         });
 
-        const userId = authResponse.data.localId;
-
-        const firestoreResponse = await axios.post(
-          `https://firestore.googleapis.com/v1/projects/clubbox-system/databases/(default)/documents/Student?documentId=${userId}`, 
-          {
-            fields: {
-              firstName: { stringValue: this.user.firstName },
-              lastName: { stringValue: this.user.lastName },
-              matricNo: { stringValue: this.user.matricNo },
-              yearCourse: { stringValue: this.user.yearCourse },
-              phoneNumber: { stringValue: this.user.phoneNumber },
-              address: { stringValue: this.user.address },
-              utmEmail: { stringValue: this.user.email },
-              password: { stringValue: this.user.password }
-            }
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${authResponse.data.idToken}`
-            }
-          }
-        );
-
-        console.log('User registered and document added:', firestoreResponse.data);
+        console.log('User registered and row added:', dbResponse.data);
         this.$router.push('/');
       } catch (error) {
         console.error('Error registering user:', error);
