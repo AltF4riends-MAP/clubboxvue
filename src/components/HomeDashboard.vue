@@ -27,6 +27,7 @@ import BackgroundScenery from './general/BackgroundScenery.vue';
 import FooterComponent from './general/FooterComponent.vue';
 import HeaderComponent from './general/HeaderComponent.vue';
 import EventCard from './event/EventCard.vue';
+import axios from 'axios';
 
 export default {
   name: 'HomeDashboard',
@@ -44,27 +45,25 @@ export default {
   },
   data() {
     return {
-      events: [
-        {
-          id: 1,
-          title: 'ClubBox Workshop',
-          date: 'June 10, 2024',
-          description: 'A workshop on the ClubBox Management.',
-          price: 12.00,
-          image: require('../assets/clubbox.jpeg')
-        },
-        {
-          id: 2,
-          title: 'UTM Workshop',
-          date: 'June 15, 2024',
-          description: 'A workshop to learn about the greatness of UTM.',
-          price: 5.00,
-          image: require('../assets/logo.png')
-        }
-      ]
+      events: []
     };
   },
+  created() {
+    this.fetchEvents();
+  },
   methods: {
+    async fetchEvents() {
+      try {
+        const response = await axios.get('http://localhost/clubboxvue/src/components/event/get_events.php');
+        console.log('Response:', response); // Log the entire response object
+        this.events = response.data.map(event => ({
+          ...event,
+          image: `data:image/jpeg;base64,${event.image}`
+        }));
+      } catch (error) {
+        console.error('Error fetching event data:', error);
+      }
+    },
     handleAddToCart(eventDetail) {
       this.$emit('add-cart', eventDetail);
     }
@@ -96,3 +95,4 @@ export default {
   height: 80vh;
 }
 </style>
+
