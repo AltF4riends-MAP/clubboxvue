@@ -17,8 +17,10 @@ function get_input_data()
     return json_decode(file_get_contents('php://input'), true);
 }
 
+// Connect to the database
 $conn = getDbConnection();
 
+// Parse the request URL to determine the resource and ID
 $request_uri = explode('?', $_SERVER['REQUEST_URI'], 2);
 $path = trim($request_uri[0], '/');
 $segments = explode('/', $path);
@@ -132,7 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $resource == 'student') {
 //********************************************************************************************* */
 //********************************************************************************************* */
 
-//This is for Eventssssss
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'clubevent' && !$id) {
     $sql = "SELECT * FROM clubevent";
     $result = $conn->query($sql);
@@ -151,6 +152,57 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'clubevent' && !$id) {
         }
     }
     echo json_encode($events);
+    exit;
+}
+
+//********************************************************************************************* */
+//********************************************************************************************* */
+//club stuff
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $resource == 'club') {
+    // Get data from POST request
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $image = isset($_POST['image']) ? base64_decode($_POST['image']) : null;
+
+    // Prepare and bind
+    $stmt = $conn->prepare("UPDATE club SET name=?, description=?, image=? WHERE id=?");
+    $stmt->bind_param("sssi", $name, $description, $image, $id);
+
+    if ($stmt->execute()) {
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["error" => "Error updating record: " . $conn->error]);
+    }
+
+    $stmt->close();
+    exit;
+
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'club') {
+    $sql = "SELECT id, name, description, image FROM club";
+    $result = $conn->query($sql);
+
+    if ($result === false) {
+        echo json_encode(["error" => "Error executing query: " . $conn->error]);
+        $conn->close();
+        exit();
+    }
+
+    $clubs = [];
+
+    if ($result->num_rows > 0) {
+        // Output data of each row
+        while ($row = $result->fetch_assoc()) {
+            $row['image'] = base64_encode($row['image']);
+            $clubs[] = $row;
+        }
+    } else {
+        echo json_encode(["error" => "No results found"]);
+    }
+
+    echo json_encode($clubs);
     exit;
 }
 

@@ -70,7 +70,7 @@
           formData.append('description', this.localClub.description);
           formData.append('image', this.localClub.image);
           
-          const response = await axios.post('http://localhost/clubboxvue/src/components/club/update_club.php', formData);
+          const response = await axios.post('http://localhost/ClubBoxPHP/club', formData);
           if (response.data.success) {
             this.$emit('update', this.localClub);
             this.close();

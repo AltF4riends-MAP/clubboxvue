@@ -46,7 +46,7 @@ export default {
   methods: {
     async fetchClubs() {
       try {
-        const response = await axios.get('http://localhost/clubboxvue/src/components/club/get_clubs.php');
+        const response = await axios.get('http://localhost/ClubBoxPHP/club');
         console.log('Response:', response); // Log the entire response object
         this.clubs = response.data.map(club => ({
           ...club,
