@@ -17,10 +17,8 @@ function get_input_data()
     return json_decode(file_get_contents('php://input'), true);
 }
 
-// Connect to the database
 $conn = getDbConnection();
 
-// Parse the request URL to determine the resource and ID
 $request_uri = explode('?', $_SERVER['REQUEST_URI'], 2);
 $path = trim($request_uri[0], '/');
 $segments = explode('/', $path);
@@ -54,6 +52,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'student' && $id) {
     }
     exit;
 }
+
+//Update User
+if ($_SERVER['REQUEST_METHOD'] == 'PUT' && $resource == 'student' && $id) {
+    $id = intval($id);
+    $input = get_input_data();
+    if (!$input) {
+        echo json_encode(["message" => "Invalid input"]);
+        http_response_code(400);
+        exit;
+    }
+
+    $firstName = $conn->real_escape_string($input['firstName']);
+    $lastName = $conn->real_escape_string($input['lastName']);
+    $matricNo = $conn->real_escape_string($input['matricNo']);
+    $yearCourse = $conn->real_escape_string($input['yearCourse']);
+    $phoneNumber = $conn->real_escape_string($input['phoneNumber']);
+    $address = $conn->real_escape_string($input['address']);
+    $password = $conn->real_escape_string($input['password']);
+
+    $sql = "UPDATE student SET firstName = '$firstName', lastName = '$lastName', matricNo ='$matricNo', yearCourse = '$yearCourse', phoneNumber = '$phoneNumber', address = '$address', password = '$password' WHERE id = $id";
+    if ($conn->query($sql) === TRUE) {
+        echo json_encode(["message" => "User Updated successfully"]);
+    } else {
+        echo json_encode(["message" => "Error: " . $conn->error]);
+        http_response_code(500);
+    }
+    exit;
+}
+
 
 // POST for login and register
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $resource == 'student') {
@@ -105,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $resource == 'student') {
 //********************************************************************************************* */
 //********************************************************************************************* */
 
+//This is for Eventssssss
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'clubevent' && !$id) {
     $sql = "SELECT * FROM clubevent";
     $result = $conn->query($sql);
