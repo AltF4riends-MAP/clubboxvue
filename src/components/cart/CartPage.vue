@@ -15,7 +15,7 @@
               <h2>Total Price: RM {{ total.toFixed(2) }}</h2>
             </div>
             <div class="cart-box">
-              <v-btn >Pay</v-btn>
+              <v-btn @click="alertPayment">Pay</v-btn>
             </div>
         </div>
       </background-scene>
@@ -64,7 +64,7 @@
 
       alertPayment()
       {
-        
+        this.$router.push('/dashboard');
       }
     },
     created() {
@@ -111,5 +111,14 @@
   .cart-card {
     margin-bottom: 10px;
   }
+
+  v-btn {
+  padding: 0.5em 1em;
+  background-color: maroon;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
   </style>
   
