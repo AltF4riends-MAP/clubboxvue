@@ -7,7 +7,6 @@
                     <div class="innerbox">
                     <h1>Add Event</h1>
                     <form @submit.prevent="addEventInfo">
-                        <!-- <input type="file" accept="image/*" @change=uploadImage> -->
 
                         <div class="top-form">
                             <label for="eventName">Event Name:</label>
@@ -75,25 +74,12 @@ export default {
             eventShortDesc: '',
             eventTime: '',
             eventPrice: 0,
-            // eventImage: null
         };
     },
     methods:{
-        // uploadImage(event){
-        //     this.eventImage = event.target.files[0];
-        // },
 
         async addEventInfo() {
             try{
-                // let formData = new FormData();
-                // formData.append('eventName', this.eventName);
-                // formData.append('eventDesc', this.eventDesc);
-                // formData.append('eventDate', this.eventDate);
-                // formData.append('eventType', this.eventType);
-                // formData.append('eventShortDesc', this.eventShortDesc);
-                // formData.append('eventTime', this.eventTime);
-                // formData.append('eventPrice', this.eventPrice);
-                // formData.append('eventImage', this.eventImage);
 
                 const dbResponse = await axios.post('http://localhost/ClubBoxPHP/clubevent', {
                   eventName: this.eventName,
@@ -102,7 +88,7 @@ export default {
                   eventType: this.eventType,
                   eventShortDesc: this.eventShortDesc,
                   eventTime: this.eventTime,
-                  eventPrice: this.eventPrice
+                  eventPrice: this.eventPrice,
             });
             
             console.log('Event Data Added: ', dbResponse.data);
