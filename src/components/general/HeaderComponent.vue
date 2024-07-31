@@ -15,6 +15,7 @@
           <li><router-link to="/club">Club</router-link></li>
           <li><router-link to="/calendar">Calendar</router-link></li>
           <li><router-link to="/faq">FAQ</router-link></li>
+          <li><router-link to="/addevent">Add Event</router-link></li>
           <li class="menu">
             <i class="fas fa-user-circle icon" @click="toggleDropdown"><img class="user" src="../../assets/user.png"></i>
             <ul v-if="dropdownVisible" class="dropdown-menu">

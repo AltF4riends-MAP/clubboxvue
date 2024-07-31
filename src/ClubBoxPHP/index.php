@@ -155,6 +155,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'clubevent' && !$id) {
     exit;
 }
 
+echo "Before Post Club";
+
+// clubEvent Stuff
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $resource == 'clubevent') {
+
+    echo "In Post Club";
+
+    $input = get_input_data();
+    // $uploadEventImage = file_get_contents($_FILES['$eventImage']);
+
+    if (!$input) {
+        echo json_encode(["message" => "Invalid input"]);
+        http_response_code(400);
+        exit;
+    }
+
+    $eventName = $conn->real_escape_string($input['eventName']);
+    $eventDesc = $conn->real_escape_string($input['eventDesc']);
+    $eventDate = $conn->real_escape_string($input['eventDate']);
+    $eventType = $conn->real_escape_string($input['eventType']);
+    $eventShortDesc = $conn->real_escape_string($input['eventShortDesc']);
+    $eventTime = $conn->real_escape_string($input['eventTime']);
+    $eventPrice = $conn->real_escape_string($input['eventPrice']);
+
+
+    $sql = "INSERT INTO clubevent (name, description, date, type, shortDescription, time, price, clubId) 
+    VALUES ('$eventName', '$eventDesc', '$eventDate', '$eventType', '$eventShortDesc', '$eventTime', '$eventPrice', 1)";
+
+    if ($conn->query($sql) === TRUE) {
+        echo json_encode(["message" => "User created successfully", "id" => $conn->insert_id]);
+    } else {
+        echo json_encode(["message" => "Error: " . $conn->error]);
+        http_response_code(500);
+    }
+    exit;
+}
+
 //********************************************************************************************* */
 //********************************************************************************************* */
 //club stuff
@@ -205,6 +242,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $resource == 'club') {
     echo json_encode($clubs);
     exit;
 }
+
+
+
+// if ($_SERVER['REQUEST_METHOD'] == 'POST' && $resource == 'clubevent') {
+//     $input = get_input_data();
+    
+//     // Check if the file was uploaded without errors
+//     if (isset($_FILES['eventImage']) && $_FILES['eventImage']['error'] == 0) {
+//         $fileTmpPath = $_FILES['eventImage']['tmp_name'];
+//         $fileName = $_FILES['eventImage']['name'];
+//         $fileSize = $_FILES['eventImage']['size'];
+//         $fileType = $_FILES['eventImage']['type'];
+//         $fileNameCmps = explode(".", $fileName);
+//         $fileExtension = strtolower(end($fileNameCmps));
+
+//         // Sanitize file name
+//         $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+
+//         // Check if the file has an allowed extension
+//         $allowedfileExtensions = array('jpg', 'gif', 'png', 'webp');
+//         if (in_array($fileExtension, $allowedfileExtensions)) {
+//             // Directory where uploaded files will be saved
+//             $uploadFileDir = './uploaded_files/';
+//             $dest_path = $uploadFileDir . $newFileName;
+
+//             if (move_uploaded_file($fileTmpPath, $dest_path)) {
+//                 $uploadEventImage = $dest_path;
+//             } else {
+//                 echo json_encode(["message" => "There was an error moving the uploaded file."]);
+//                 http_response_code(500);
+//                 exit;
+//             }
+//         } else {
+//             echo json_encode(["message" => "Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions)]);
+//             http_response_code(400);
+//             exit;
+//         }
+//     } else {
+//         echo json_encode(["message" => "No file uploaded or there was an upload error."]);
+//         http_response_code(400);
+//         exit;
+//     }
+
+//     $eventName = $conn->real_escape_string($input['eventName']);
+//     $eventDesc = $conn->real_escape_string($input['eventDesc']);
+//     $eventDate = $conn->real_escape_string($input['eventDate']);
+//     $eventType = $conn->real_escape_string($input['eventType']);
+//     $eventShortDesc = $conn->real_escape_string($input['eventShortDesc']);
+//     $eventTime = $conn->real_escape_string($input['eventTime']);
+//     $eventPrice = $conn->real_escape_string($input['eventPrice']);
+
+//     $sql = "INSERT INTO clubevent (name, description, date, type, shortDescription, time, price, image) 
+//             VALUES ('$eventName', '$eventDesc', '$eventDate', '$eventType', '$eventShortDesc', '$eventTime', '$eventPrice', '$uploadEventImage')";
+
+//     if ($conn->query($sql) === TRUE) {
+//         echo json_encode(["message" => "Event created successfully", "id" => $conn->insert_id]);
+//     } else {
+//         echo json_encode(["message" => "Error: " . $conn->error]);
+//         http_response_code(500);
+//     }
+//     exit;
+// }
 
 echo json_encode(["message" => "Invalid request method"]);
 http_response_code(405);

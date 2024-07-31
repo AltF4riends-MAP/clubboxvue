@@ -7,6 +7,7 @@ import CalendarPage from '@/components/event/CalendarPage.vue';
 import ClubPage from '@/components/club/ClubPage.vue';
 import CartPage from '@/components/cart/CartPage.vue';
 import ManageProfile from '@/components/ManageProfile/ManageProfile.vue';
+import AddEvent from '@/components/event/AddEvent.vue';
 
 
 const routes = [
@@ -55,6 +56,12 @@ const routes = [
     path: '/profile',
     name: 'ManageProfile',
     component: ManageProfile
+  },
+
+  {
+    path: '/addevent',
+    name: 'AddEvent',
+    component: AddEvent
   },
 ];
 
